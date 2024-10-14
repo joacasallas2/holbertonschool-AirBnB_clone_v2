@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 """ """
-from tests.test_models.test_base_model import test_basemodel
+from tests.test_models.test_base_model import testBaseModel
 from models.amenity import Amenity
 
 
-class test_Amenity(test_basemodel):
+class TestAmenity(testBaseModel):
     """ """
 
     def __init__(self, *args, **kwargs):
