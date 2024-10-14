@@ -8,8 +8,8 @@ import json
 import os
 
 
-class test_basemodel(unittest.TestCase):
-    """ """
+class testBaseModel(unittest.TestCase):
+    """ Class to the BaseModel """
 
     def __init__(self, *args, **kwargs):
         """ """
@@ -18,13 +18,13 @@ class test_basemodel(unittest.TestCase):
         self.value = BaseModel
 
     def setUp(self):
-        """ """
-        pass
+        """ Set up test environment with a BaseModel instance """
+        self.instance = BaseModel()
 
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        except FileNotFoundError:
             pass
 
     def test_default(self):
@@ -63,7 +63,7 @@ class test_basemodel(unittest.TestCase):
                          i.__dict__))
 
     def test_todict(self):
-        """ """
+        """ test conversion of instance """
         i = self.value()
         n = i.to_dict()
         self.assertEqual(i.to_dict(), n)
