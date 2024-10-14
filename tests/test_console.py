@@ -32,14 +32,14 @@ class TestHBNBCommand(unittest.TestCase):
     def test_quit(self):
         """Test of HBNBCommand class for the quit command"""
         with patch('sys.stdout', new=StringIO()) as f:
-            self.console.onecmd("quit")
-            self.assertEqual("", f.getvalue())
+            result = self.console.onecmd("quit")
+            self.assertTrue(result)
 
     def test_EOF(self):
         """Test of HBNBCommand class for the EOF command"""
         with patch('sys.stdout', new=StringIO()) as f:
-            self.console.onecmd("EOF")
-            self.assertTrue(self.console.onecmd("EOF"))
+            result = self.console.onecmd("EOF")
+            self.assertTrue(result)
 
     def test_emptyline(self):
         """Test of HBNBCommand class for the emptyline command"""
