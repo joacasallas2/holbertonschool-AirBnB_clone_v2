@@ -32,7 +32,8 @@ class TestHBNBCommand(unittest.TestCase):
     def test_quit(self):
         """Test of HBNBCommand class for the quit command"""
         with patch('sys.stdout', new=StringIO()) as f:
-            self.console.onecmd("quit")
+            with self.assertRaises(SystemExit):
+                self.console.onecmd("quit")
             self.assertEqual("", f.getvalue())
 
     def test_EOF(self):
