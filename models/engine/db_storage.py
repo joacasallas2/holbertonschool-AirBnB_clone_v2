@@ -3,6 +3,7 @@
 import os
 import MySQLdb
 
+
 def get_db_connection():
     """ Establish a connection to the MySQL database """
     env = os.environ.get('HBNB_ENV', 'dev')
@@ -30,6 +31,7 @@ def get_db_connection():
     except MySQLdb.OperationalError as e:
         print(f"Error connecting to MySQL: {e}")
         return None
+
 
 if __name__ == "__main__":
     connection = get_db_connection()
