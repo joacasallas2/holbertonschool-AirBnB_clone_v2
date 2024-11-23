@@ -16,7 +16,7 @@ class TestDBStorage(unittest.TestCase):
         os.environ["HBNB_MYSQL_PWD"] = "test_password"
         os.environ["HBNB_MYSQL_HOST"] = "localhost"
         os.environ["HBNB_MYSQL_DB"] = "test_db"
-        os.system("./setup_mysql_test")
+        os.system("../setup_mysql_test")
 
     def test_successful_connection(self):
         """test a successful database connection"""
