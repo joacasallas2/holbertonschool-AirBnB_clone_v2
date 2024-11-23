@@ -11,8 +11,8 @@ class TestDBStorage(unittest.TestCase):
     def setUpClass(cls):
         """Set up environment variables and database for testing"""
         os.environ["HBNB_ENV"] = "test"
-        os.environ["HBNB_MYSQL_USER"] = "test_user"
-        os.environ["HBNB_MYSQL_PWD"] = "test_password"
+        os.environ["HBNB_MYSQL_USER"] = "root"
+        os.environ["HBNB_MYSQL_PWD"] = "root"
         os.environ["HBNB_MYSQL_HOST"] = "localhost"
         os.environ["HBNB_MYSQL_DB"] = "test_db"
 
@@ -29,9 +29,8 @@ class TestDBStorage(unittest.TestCase):
             f"mysql -u {os.environ['HBNB_MYSQL_USER']} "
             f"-p{os.environ['HBNB_MYSQL_PWD']} "
             f"-h {os.environ['HBNB_MYSQL_HOST']} "
-            f"{os.environ['HBNB_MYSQL_DB']} < {sql_file_path}"
-        )
-
+            f"{os.environ['HBNB_MYSQL_DB']} < {sql_file_path} 2>/dev/null"
+)
         # Check if the command was successful
         if exit_code != 0:
             raise RuntimeError(f"Error executing SQL script. Exit code: {exit_code}")
