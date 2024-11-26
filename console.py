@@ -127,6 +127,14 @@ class HBNBCommand(cmd.Cmd):
             if "=" in param:
                 key, value = param.split("=", 1)
                 if hasattr(new_instance, key):
+                    value = value.replace("_", " ").strip(' "').replace('"', '\\"')
+                    try:
+                        if "." in value:
+                            value = float(value)
+                        else:
+                            value = int(value)
+                    except ValueError:
+                        pass
                     setattr(new_instance, key, value)
         new_instance.save()
         print(new_instance.id)
