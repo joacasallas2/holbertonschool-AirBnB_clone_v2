@@ -2,9 +2,9 @@
 # Author: Joana Casallas
 """This module creates a connection with a relational database"""
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import (create_engine)
+from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
-from sqlalchemy.orm import sessionmaker
 from models.state import State
 from models.review import Review
 from models.amenity import Amenity
@@ -50,7 +50,8 @@ class DBStorage:
             finally:
                 connection.close()
         Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine)
+        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(session_factory)
         self.__session = Session()
 
     def all(self, cls=None):
@@ -71,3 +72,26 @@ class DBStorage:
             else:
                 raise ValueError(f"Class {cls} is not recognized")
         return dict_objs
+    
+    def new(self, obj):
+        """add the object to the current database session"""
+        self.__session.add(obj)
+
+    def save(self):
+        """commit all changes of the current database session"""
+        try:
+            self.__session.commit()
+        except Exception as e:
+            self.__session.rollback()
+            print(f"error saving changes: {e}")
+
+    def delete(self, obj=None):
+        """Delete obj from the current database session """
+        if obj is not None:
+            self.__session.delete(obj)
+
+    def reload(self):
+        """Create tables and create the current session"""
+        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(session_factory)
+        self.__session = Session()
