@@ -4,7 +4,6 @@ import os
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
-from models import storage
 from models.city import City
 
 
@@ -12,12 +11,13 @@ class State(BaseModel, Base):
     """ Class State mapped to the states table """
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    if storage == 'db':
+    if os.getenv('STORAGE_TYPE') == 'db':
         cities = relationship("City", backref="state", cascade="all, delete", passive_deletes=True)
     else:
         @property
         def cities(self):
             """returns the list of City instances with state_id equals to the current State.id"""
+            from models import storage
             cities_list = []
             for city in storage.all(City).values():
                 if city.state_id == self.id:
