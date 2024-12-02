@@ -2,7 +2,7 @@
 # Author: Joana Casallas
 """This module creates a connection with a relational database"""
 import os
-from sqlalchemy import (create_engine)
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.state import State
@@ -56,23 +56,24 @@ class DBStorage:
 
     def all(self, cls=None):
         """Query all objects on the current database session"""
+        list_classes_entities = [Place, State]
         dict_objs = {}
         if cls is None:
-            for class_name in self.__class_names:
-                query_results = self.__session.query(class_name).all()
+            for cls_entity in list_classes_entities:
+                query_results = self.__session.query(cls_entity).all()
                 for obj in query_results:
-                    key = f"{type(obj).__name__}.{obj.id}"
-                    dict_objs[key] = obj
+                    obj_key = f"{type(obj).__name__}.{obj.id}"
+                    dict_objs[obj_key] = obj
         else:
-            if cls in self.__class_names:
+            if cls in list_classes_entities:
                 query_results = self.__session.query(cls).all()
                 for obj in query_results:
-                    key = f"{type(obj).__name__}.{obj.id}"
-                    dict_objs[key] = obj
+                    obj_key = f"{type(obj).__name__}.{obj.id}"
+                    dict_objs[obj_key] = obj
             else:
                 raise ValueError(f"Class {cls} is not recognized")
         return dict_objs
-    
+
     def new(self, obj):
         """add the object to the current database session"""
         self.__session.add(obj)
@@ -86,7 +87,7 @@ class DBStorage:
             print(f"error saving changes: {e}")
 
     def delete(self, obj=None):
-        """Delete obj from the current database session """
+        """Delete obj from the current database session"""
         if obj is not None:
             self.__session.delete(obj)
 
