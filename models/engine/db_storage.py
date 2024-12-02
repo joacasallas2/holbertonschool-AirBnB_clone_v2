@@ -55,7 +55,7 @@ class DBStorage:
     def all(self, cls=None):
         """Query all objects on the current database session"""
         if cls is None:
-            classes = [State, City]
+            classes = [State, City, User]
         else:
             if isinstance(cls, str):
                 cls = globals().get(cls)
