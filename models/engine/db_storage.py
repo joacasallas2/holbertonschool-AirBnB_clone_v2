@@ -3,12 +3,15 @@
 """This module creates a connection with a relational database"""
 import os
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import create_engine
+from models.base_model import Base
 from models.state import State
 from models.review import Review
 from models.amenity import Amenity
 from models.city import City
 from models.place import Place
 from models.user import User
+
 
 
 class DBStorage:
@@ -18,8 +21,6 @@ class DBStorage:
 
     def __init__(self):
         """Initialize the engine and session for database connection"""
-        from models.base_model import Base
-        from sqlalchemy import create_engine
         # Retrieve environment variables
         env = os.environ.get("HBNB_ENV", "dev")
         host = os.environ.get("HBNB_MYSQL_HOST", "localhost")
