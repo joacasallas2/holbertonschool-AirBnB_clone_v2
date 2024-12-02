@@ -2,9 +2,7 @@
 # Author: Joana Casallas
 """This module creates a connection with a relational database"""
 import os
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from models.base_model import Base
 from models.state import State
 from models.review import Review
 from models.amenity import Amenity
@@ -15,13 +13,13 @@ from models.user import User
 
 class DBStorage:
     """Database Storage engine for MySQL database"""
-
     __engine = None
     __session = None
-    __class_names = {User, State, City, Amenity, Place, Review}
 
     def __init__(self):
         """Initialize the engine and session for database connection"""
+        from models.base_model import Base
+        from sqlalchemy import create_engine
         # Retrieve environment variables
         env = os.environ.get("HBNB_ENV", "dev")
         host = os.environ.get("HBNB_MYSQL_HOST", "localhost")
@@ -56,23 +54,20 @@ class DBStorage:
 
     def all(self, cls=None):
         """Query all objects on the current database session"""
-        list_classes_entities = [Place, State]
-        dict_objs = {}
         if cls is None:
-            for cls_entity in list_classes_entities:
-                query_results = self.__session.query(cls_entity).all()
-                for obj in query_results:
-                    obj_key = f"{type(obj).__name__}.{obj.id}"
-                    dict_objs[obj_key] = obj
+            classes = [State, City]
         else:
-            if cls in list_classes_entities:
-                query_results = self.__session.query(cls).all()
-                for obj in query_results:
-                    obj_key = f"{type(obj).__name__}.{obj.id}"
-                    dict_objs[obj_key] = obj
-            else:
-                raise ValueError(f"Class {cls} is not recognized")
-        return dict_objs
+            if isinstance(cls, str):
+                cls = globals().get(cls)
+            classes = [cls]
+
+        objects = {}
+        for class_type in classes:
+            query = self.__session.query(class_type).all()
+            for obj in query:
+                key = f"{obj.__class__.__name__}.{obj.id}"
+                objects[key] = obj
+        return objects
 
     def new(self, obj):
         """add the object to the current database session"""
