@@ -238,7 +238,8 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, args):
         """Count current number of class instances"""
         count = 0
-        for k, v in storage._FileStorage__objects.items():
+        all_objects = storage.all()
+        for k, v in all_objects.items():
             if args == k.split('.')[0]:
                 count += 1
         print(count)
