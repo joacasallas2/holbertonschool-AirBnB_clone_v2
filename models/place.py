@@ -2,14 +2,13 @@
 """ Place Module for HBNB project """
 import os
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
-from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
 
 
 class Place(BaseModel, Base):
     """ A place to stay """
+    __tablename__ = 'places'
     if os.getenv('STORAGE_TYPE') == 'db' or os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)

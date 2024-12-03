@@ -9,8 +9,8 @@ from models.city import City
 
 class State(BaseModel, Base):
     """ Class State mapped to the states table """
+    __tablename__ = 'states'
     if os.getenv('STORAGE_TYPE') == 'db' or os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        __tablename__ = 'states'
         name = Column(String(128), nullable=False)
         cities = relationship("City", backref="state", cascade="all, delete", passive_deletes=True)
     else:
