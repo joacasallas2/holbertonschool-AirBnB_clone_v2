@@ -6,7 +6,7 @@ from models.base_model import BaseModel, Base
 
 
 class User(BaseModel, Base):
-    """Class User mapped to the users table"""
+    """User class mapped to the users table"""
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
