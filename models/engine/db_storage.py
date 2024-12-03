@@ -32,7 +32,7 @@ class DBStorage:
             raise ValueError("Missing environment variables for DB configuration")
 
         self.__engine = create_engine(
-            f"mysql+mysqldb://{user}:{password}@{host}/{database}", pool_pre_ping=True
+            f"mysql+mysqldb://{user}:{password}@{host}:3306/{database}", pool_pre_ping=True
         )
         if env == "test":
             try:
