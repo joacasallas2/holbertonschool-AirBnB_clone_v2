@@ -56,10 +56,12 @@ class DBStorage:
     def all(self, cls=None):
         """Query all objects on the current database session"""
         if cls is None:
-            classes = [State, City, User, Place]
+            classes = [State, City, User, Place, Review, Amenity]
         else:
             if isinstance(cls, str):
                 cls = globals().get(cls)
+                if cls is None:
+                    raise ValueError(f"class {cls} not recognized")
             classes = [cls]
 
         objects = {}
@@ -72,11 +74,13 @@ class DBStorage:
 
     def new(self, obj):
         """add the object to the current database session"""
+        print(f"Adding object: {obj}")
         self.__session.add(obj)
 
     def save(self):
         """commit all changes of the current database session"""
         try:
+            print("Saving session...")
             self.__session.commit()
         except Exception:
             self.__session.rollback()
