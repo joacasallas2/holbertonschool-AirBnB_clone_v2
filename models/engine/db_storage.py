@@ -42,6 +42,7 @@ class DBStorage:
                     "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE();"
                 )
                 for row in result:
+                    connection.execute("SET FOREIGN_KEY_CHECKS = 1")
                     table_name = row[0]
                     connection.execute(f"DROP TABLE IF EXISTS `{table_name}`;")
             except Exception as e:
@@ -56,7 +57,7 @@ class DBStorage:
     def all(self, cls=None):
         """Query all objects on the current database session"""
         if cls is None:
-            classes = [State, City, User, Place, Review, Amenity]
+            classes = [State, City, User, Place, Review]
         else:
             if isinstance(cls, str):
                 cls = globals().get(cls)
@@ -82,7 +83,8 @@ class DBStorage:
         try:
             print("Saving session...")
             self.__session.commit()
-        except Exception:
+        except Exception as e:
+            print(f"Error saving session: {e}")
             self.__session.rollback()
 
     def delete(self, obj=None):
