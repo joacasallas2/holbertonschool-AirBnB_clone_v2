@@ -22,7 +22,7 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
     if os.getenv("HBNB_TYPE_STORAGE") == "db":
         reviews = relationship(
-            "Review", backref="place",cascade="all, delete, delete-orphan", passive_deletes=True)
+            "Review", back_populates="place",cascade="all, delete, delete-orphan", passive_deletes=True)
     else:
         @property
         def reviews(self):
