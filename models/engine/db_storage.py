@@ -51,7 +51,6 @@ class DBStorage:
                 connection.execute("SET FOREIGN_KEY_CHECKS = 1")
                 connection.close()
         Base.metadata.create_all(self.__engine)
-        print(Base.metadata.tables.keys())
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
@@ -77,13 +76,11 @@ class DBStorage:
 
     def new(self, obj):
         """add the object to the current database session"""
-        print(f"Adding object: {obj}")
         self.__session.add(obj)
 
     def save(self):
         """commit all changes of the current database session"""
         try:
-            print("Saving session...")
             self.__session.commit()
         except Exception as e:
             print(f"Error saving session: {e}")
