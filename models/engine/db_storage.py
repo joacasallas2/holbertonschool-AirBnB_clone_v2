@@ -48,8 +48,10 @@ class DBStorage:
             except Exception as e:
                 print(f"Error while dropping tables; {e}")
             finally:
+                connection.execute("SET FOREIGN_KEY_CHECKS = 1")
                 connection.close()
         Base.metadata.create_all(self.__engine)
+        print(Base.metadata.tables.keys())
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
@@ -70,7 +72,7 @@ class DBStorage:
             query = self.__session.query(class_type).all()
             for obj in query:
                 key = f"{obj.__class__.__name__}.{obj.id}"
-                objects[key] = obj
+                objects[key] = obj.to_dict()
         return objects
 
     def new(self, obj):
@@ -94,6 +96,7 @@ class DBStorage:
 
     def reload(self):
         """Create tables and create the current session"""
+        Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
