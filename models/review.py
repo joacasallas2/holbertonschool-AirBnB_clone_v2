@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 """ Review module for the HBNB project """
-import os
 from sqlalchemy import Column, String, ForeignKey
-from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
 
 
