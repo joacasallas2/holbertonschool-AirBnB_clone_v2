@@ -7,7 +7,7 @@ from models.base_model import BaseModel, Base
 import models
 
 
-place_amenity_table = Table('place_amenity', Base.metadata,
+place_amenity = Table('place_amenity', Base.metadata,
     Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
     Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
  )
@@ -29,7 +29,7 @@ class Place(BaseModel, Base):
         reviews = relationship(
             "Review", backref="place", cascade="all, delete, delete-orphan", passive_deletes=True)
         amenities = relationship(
-            "Amenity", secondary="place_amenity_table", viewonly=True)
+            "Amenity", secondary="place_amenity", viewonly=False, back_populates="place_amenities")
     else:
         @property
         def reviews(self):
