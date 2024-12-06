@@ -127,7 +127,8 @@ class HBNBCommand(cmd.Cmd):
             if "=" in param:
                 key, value = param.split("=", 1)
                 if hasattr(new_instance, key):
-                    value = value.replace("_", " ").strip(' "').replace('"', '\\"')
+                    value = value.replace("_", " ").strip(' "').replace(
+                        '"', '\\"')
                     try:
                         if "." in value:
                             value = float(value)
