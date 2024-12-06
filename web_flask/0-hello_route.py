@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route("/", strict_slashes=False)
 def Hello():
     """ function that display Hello HBNB"""
-    return "<p>Hello HBNB!</p>"
+    return "Hello HBNB!"
 
 
 if __name__ == '__main__':
