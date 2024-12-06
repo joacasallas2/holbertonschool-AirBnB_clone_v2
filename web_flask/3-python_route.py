@@ -32,7 +32,7 @@ def c_text(text):
 @app.route("/python/<text>", strict_slashes=False)
 def python_text(text="is cool"):
     """Display Python text"""
-    sentence = f"python {escape(text)}"
+    sentence = f"Python {escape(text)}"
     sentence = sentence.replace("_", " ")
     return sentence
 
