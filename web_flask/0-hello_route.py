@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Author: Joana Casallas
 """ script that starts a Flask web application """
 from flask import Flask
