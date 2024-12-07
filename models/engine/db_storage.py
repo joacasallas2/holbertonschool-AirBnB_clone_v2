@@ -13,7 +13,6 @@ from models.place import Place
 from models.user import User
 
 
-
 class DBStorage:
     """Database Storage engine for MySQL database"""
     __engine = None
@@ -29,17 +28,18 @@ class DBStorage:
         database = os.environ.get("HBNB_MYSQL_DB")
 
         if not all([user, host, password, database]):
-            raise ValueError("Missing environment variables for DB configuration")
+            raise ValueError("Missing env variables for DB configuration")
 
         self.__engine = create_engine(
-            f"mysql+mysqldb://{user}:{password}@{host}:3306/{database}", pool_pre_ping=True
-        )
+            f"mysql+mysqldb://{user}:{password}@{host}:3306/{database}",
+            pool_pre_ping=True)
         if env == "test":
             try:
                 connection = self.__engine.connect()
                 connection.execute("SET FOREIGN_KEY_CHECKS = 0")
                 result = connection.execute(
-                    "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE();"
+                    "SELECT table_name FROM information_schema.tables\
+                    WHERE table_schema = DATABASE();"
                 )
                 for row in result:
                     connection.execute("SET FOREIGN_KEY_CHECKS = 1")
@@ -51,14 +51,14 @@ class DBStorage:
                 connection.execute("SET FOREIGN_KEY_CHECKS = 1")
                 connection.close()
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        Session = scoped_session(session_factory)
-        self.__session = Session()
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        self.__session = scoped_session(session_factory)
 
     def all(self, cls=None):
         """Query all objects on the current database session"""
         if cls is None:
-            classes = [State, City, User, Place, Review]
+            classes = [State, City, User, Place, Review, Amenity]
         else:
             if isinstance(cls, str):
                 cls = globals().get(cls)
@@ -94,6 +94,10 @@ class DBStorage:
     def reload(self):
         """Create tables and create the current session"""
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        Session = scoped_session(session_factory)
-        self.__session = Session()
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        self.__session = scoped_session(session_factory)
+
+    def close(self):
+        """Close method of DBStorage"""
+        self.__session.remove()
