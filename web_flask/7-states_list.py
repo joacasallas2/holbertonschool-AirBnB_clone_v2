@@ -13,12 +13,7 @@ app = Flask(__name__)
 def states_list_function():
     """Display a HTML page with the list of states"""
     dict_objs = storage.all(State)
-    states_list = []
-    for obj in dict_objs.values():
-        state_id = obj.id
-        state_name = obj.name
-        states_list.append((state_id, state_name))
-    states_list.sort(key=lambda x: x[1])
+    states_list = sorted(list(dict_objs.values()), key=lambda x: x.name)
     return render_template('7-states_list.html', states_list=states_list)
 
 
