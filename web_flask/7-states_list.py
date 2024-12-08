@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # Author: Joana Casallas
-"""Flask App"""
+"""Flask Web Application to display a list of states """
 from flask import Flask, render_template
 from models import storage
 from models.state import State
@@ -18,13 +18,17 @@ def states_list_function():
         state_id = obj.id
         state_name = obj.name
         states_list.append((state_id, state_name))
-    states_list.sort(key = lambda x: x[1])
+    states_list.sort(key=lambda x: x[1])
     return render_template('7-states_list.html', states_list=states_list)
+
 
 @app.teardown_appcontext
 def close_db_connection(exception):
-    """Close the storage session"""
-    storage.close()
+    """Remove the current SQLAlchemy Session after each request."""
+    try:
+        storage.close()
+    except Exception as e:
+        print(f"Error closing session:. {e}")
 
 
 if __name__ == '__main__':
