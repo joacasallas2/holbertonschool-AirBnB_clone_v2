@@ -10,22 +10,12 @@ from models.city import City
 app = Flask(__name__)
 
 
-@app.route('/states', strict_slashes=False)
 @app.route("/cities_by_states", strict_slashes=False)
 def cities_by_state():
     """Display a HTML page with the list of cities by state"""
-    dict_states = storage.all(State)
-    dict_cities = storage.all(City)
-    list_states = sorted(list(dict_states.values()), key=lambda x: x.name)
-    state_with_cities = []
-    for state in list_states:
-        list_cities = [
-            city for city in dict_cities.values() if city.state_id == state.id]
-        list_cities = sorted(list_cities, key=lambda x: x.name)
-        state_with_cities.append((state, list_cities))
-        list_cities = []
+    dict_states = storage.all(State).values()
     return render_template(
-        '8-cities_by_states.html', state_with_cities=state_with_cities)
+        '8-cities_by_states.html', dict_states=dict_states)
 
 
 @app.teardown_appcontext
