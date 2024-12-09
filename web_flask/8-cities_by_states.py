@@ -10,6 +10,7 @@ from models.city import City
 app = Flask(__name__)
 
 
+@app.route('/states', strict_slashes=False)
 @app.route("/cities_by_states", strict_slashes=False)
 def cities_by_state():
     """Display a HTML page with the list of cities by state"""
