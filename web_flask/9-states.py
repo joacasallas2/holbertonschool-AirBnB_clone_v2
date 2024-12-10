@@ -9,12 +9,14 @@ from models.state import State
 app = Flask(__name__)
 
 
-@app.route("/cities_by_states", strict_slashes=False)
-def cities_by_state():
-    """Display a HTML page with the list of cities by state"""
+@app.route("/states", defaults={'state_id': None}, strict_slashes=False)
+@app.route("/states/<state_id>", strict_slashes=False)
+def display_states(state_id):
+    """ list of all State objects present in DBStorage"""
     dict_states = storage.all(State).values()
-    return render_template(
-        '8-cities_by_states.html', dict_states=dict_states)
+    dict_states = sorted(dict_states, key=lambda x: x.name)
+    return render_template('9-states.html',
+                           dict_states=dict_states, state_id=state_id)
 
 
 @app.teardown_appcontext
