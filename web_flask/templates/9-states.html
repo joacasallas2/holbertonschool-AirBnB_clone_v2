@@ -4,7 +4,7 @@
         <TITLE>HBNB</TITLE>
     </HEAD>
     <BODY>
-        {% if state_id is none %}
+        {% if id_number is none %}
         <H1>States</H1>
         <UL>
             {% for state in dict_states|sort(attribute='name') %}
