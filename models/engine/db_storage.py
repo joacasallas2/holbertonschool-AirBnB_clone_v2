@@ -51,6 +51,7 @@ class DBStorage:
                 connection.execute("SET FOREIGN_KEY_CHECKS = 1")
                 connection.close()
         Base.metadata.create_all(self.__engine)
+        print("Tables recreated successfully!")
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
         self.__session = scoped_session(session_factory)
