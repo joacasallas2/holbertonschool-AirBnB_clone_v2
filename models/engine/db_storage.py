@@ -50,7 +50,6 @@ class DBStorage:
             finally:
                 connection.execute("SET FOREIGN_KEY_CHECKS = 1")
                 connection.close()
-        Base.metadata.drop_all(self.__engine)
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)

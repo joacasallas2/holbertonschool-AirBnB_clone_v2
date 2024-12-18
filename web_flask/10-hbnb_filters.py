@@ -13,21 +13,25 @@ app.jinja_env.lstrip_blocks = True
 
 
 @app.route("/hbnb_filters", strict_slashes=False)
-def hbnb_filters():
-    """ load all states and amenities present in DBStorage"""
+def display_states():
+    """ list of all State objects present in DBStorage"""
     list_states = storage.all(State).values()
     list_states = sorted(list_states, key=lambda x: x.name)
+    print("States fetched:", list_states)
     list_amenities = storage.all(Amenity).values()
     list_amenities = sorted(list_amenities, key=lambda x: x.name)
+    print("Amenities fetched:", list_amenities)
     return render_template('10-hbnb_filters.html',
-                           list_states=list_states,
-                           list_amenities=list_amenities)
+                           list_states=list_states, list_amenities=list_amenities)
 
 
 @app.teardown_appcontext
 def close_db_connection(exception):
     """Remove the current SQLAlchemy Session after each request."""
-    storage.close()
+    try:
+        storage.close()
+    except Exception as e:
+        print(f"Error closing session:. {e}")
 
 
 if __name__ == '__main__':
