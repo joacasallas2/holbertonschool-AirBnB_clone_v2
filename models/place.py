@@ -12,12 +12,14 @@ place_amenity = Table(
     Base.metadata,
     Column('place_id',
            String(60),
-           ForeignKey('places.id'),
+           ForeignKey('places.id', onupdate='CASCADE',
+                      ondelete='CASCADE'),
            primary_key=True,
            nullable=False),
     Column('amenity_id',
            String(60),
-           ForeignKey('amenities.id'),
+           ForeignKey('amenities.id', onupdate='CASCADE',
+                      ondelete='CASCADE'),
            primary_key=True,
            nullable=False)
  )
@@ -39,14 +41,12 @@ class Place(BaseModel, Base):
     if os.getenv("HBNB_TYPE_STORAGE") == "db":
         reviews = relationship(
             "Review",
-            backref="place",
-            cascade="all, delete, delete-orphan",
-            passive_deletes=True)
+            backref="place")
         amenities = relationship(
             "Amenity",
             secondary="place_amenity",
             viewonly=False,
-            back_populates="place_amenities")
+            backref="place_amenities")
     else:
         @property
         def reviews(self):
