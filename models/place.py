@@ -14,14 +14,12 @@ place_amenity = Table(
            String(60),
            ForeignKey('places.id', onupdate='CASCADE',
                       ondelete='CASCADE'),
-           primary_key=True,
-           nullable=False),
+           primary_key=True),
     Column('amenity_id',
            String(60),
            ForeignKey('amenities.id', onupdate='CASCADE',
                       ondelete='CASCADE'),
-           primary_key=True,
-           nullable=False)
+           primary_key=True)
  )
 
 
