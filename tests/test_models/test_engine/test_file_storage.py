@@ -6,16 +6,14 @@ from models import storage
 import os
 
 
-class test_fileStorage(unittest.TestCase):
+class TestFileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
     def setUp(self):
         """ Set up test environment """
-        del_list = []
-        for key in storage._FileStorage__objects.keys():
-            del_list.append(key)
-        for key in del_list:
-            del storage._FileStorage__objects[key]
+        storage._FileStorage__objects = {}
+        if os.path.exists("file.json"):
+            os.remove("file.json")
 
     def tearDown(self):
         """Clean up conditions after each test"""
