@@ -6,23 +6,20 @@ from models import storage
 import os
 
 
-class test_fileStorage(unittest.TestCase):
+class TestFileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 
     def setUp(self):
         """ Set up test environment """
-        del_list = []
-        for key in storage._FileStorage__objects.keys():
-            del_list.append(key)
-        for key in del_list:
-            del storage._FileStorage__objects[key]
+        storage._FileStorage__objects = {}
+        if os.path.exists("file.json"):
+            os.remove("file.json")
 
     def tearDown(self):
-        """ Remove storage file at end of tests """
-        try:
-            os.remove('file.json')
-        except:
-            pass
+        """Clean up conditions after each test"""
+        storage._FileStorage__objects = {}
+        if os.path.exists("file.json"):
+            os.remove("file.json")
 
     def test_obj_list_empty(self):
         """ __objects is initially empty """
@@ -31,9 +28,7 @@ class test_fileStorage(unittest.TestCase):
     def test_new(self):
         """ New object is correctly added to __objects """
         new = BaseModel()
-        for obj in storage.all().values():
-            temp = obj
-        self.assertTrue(temp is obj)
+        self.assertIn(f'Basemodel.{new.id}', storage.all())
 
     def test_all(self):
         """ __objects is properly returned """
@@ -98,9 +93,7 @@ class test_fileStorage(unittest.TestCase):
         """ Key is properly formatted """
         new = BaseModel()
         _id = new.to_dict()['id']
-        for key in storage.all().keys():
-            temp = key
-        self.assertEqual(temp, 'BaseModel' + '.' + _id)
+        self.assertIn(f'Basemodel.{_id}', storage.all())
 
     def test_storage_var_created(self):
         """ FileStorage object storage created """
