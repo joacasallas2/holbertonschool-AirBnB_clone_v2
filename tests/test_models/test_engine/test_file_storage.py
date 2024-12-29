@@ -28,7 +28,7 @@ class TestFileStorage(unittest.TestCase):
     def test_new(self):
         """ New object is correctly added to __objects """
         new = BaseModel()
-        self.assertIn(f'Basemodel.{new.id}', storage.all())
+        self.assertIn(f'BaseModel.{new.id}', storage.all())
 
     def test_all(self):
         """ __objects is properly returned """
@@ -93,7 +93,7 @@ class TestFileStorage(unittest.TestCase):
         """ Key is properly formatted """
         new = BaseModel()
         _id = new.to_dict()['id']
-        self.assertIn(f'Basemodel.{_id}', storage.all())
+        self.assertIn(f'BaseModel.{_id}', storage.all())
 
     def test_storage_var_created(self):
         """ FileStorage object storage created """
