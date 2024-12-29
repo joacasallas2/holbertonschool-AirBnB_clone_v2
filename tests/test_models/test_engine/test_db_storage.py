@@ -8,6 +8,19 @@ from models import storage
 class TestDBStorage(unittest.TestCase):
     """Class to test the DBStorage methods"""
 
+    def setUp(self):
+        """Clean database after each test"""
+        self.storage = storage
+        for obj in self.storage.all().values():
+            self.storage.delete(obj)
+        self.storage.save()
+
+    def tearDown(self):
+        """Ensure database is clean after each test"""
+        for obj in self.storage.all().values():
+            self.storage.delete(obj)
+        self.storage.save()
+
     @classmethod
     def setUpClass(cls):
         """Set up for DBStorage tests"""
