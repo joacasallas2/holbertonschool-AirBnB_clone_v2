@@ -11,13 +11,13 @@ class TestFileStorage(unittest.TestCase):
 
     def setUp(self):
         """ Set up test environment """
-        storage._FileStorage__objects = {}
+        storage._FileStorage__objects.clear()
         if os.path.exists("file.json"):
             os.remove("file.json")
 
     def tearDown(self):
         """Clean up conditions after each test"""
-        storage._FileStorage__objects = {}
+        storage._FileStorage__objects.clear()
         if os.path.exists("file.json"):
             os.remove("file.json")
 
