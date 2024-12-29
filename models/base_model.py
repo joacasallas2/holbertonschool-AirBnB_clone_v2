@@ -19,7 +19,6 @@ class BaseModel:
             for key in kwargs:
                 if key not in valid_keys:
                     raise KeyError(f"Unrecognized key '{key} in kwargs")
-            self.id = kwargs[id]
             if 'updated_at' in kwargs:
                 self.updated_at = datetime.strptime(
                     kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
