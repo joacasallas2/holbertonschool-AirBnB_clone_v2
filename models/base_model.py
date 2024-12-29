@@ -8,6 +8,7 @@ class BaseModel:
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
+        valid_keys = {'id', 'created_at', 'updated_at', '__class__'}
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
@@ -15,13 +16,17 @@ class BaseModel:
             self.updated_at = datetime.now()
             storage.new(self)
         else:
+            for key in kwargs:
+                if key not in valid_keys:
+                    raise KeyError(f"Unrecognized key '{key} in kwargs")
+            self.id = kwargs[id]
             if 'updated_at' in kwargs:
-                kwargs['updated_at'] = datetime.strptime(
+                self.updated_at = datetime.strptime(
                     kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
             else:
                 self.updated_at = datetime.now()
             if 'created_at' in kwargs:
-                kwargs['created_at'] = datetime.strptime(
+                self.created_at = datetime.strptime(
                     kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
             else:
                 self.created_at = datetime.now()
