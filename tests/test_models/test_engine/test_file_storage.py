@@ -68,12 +68,15 @@ class TestFileStorage(unittest.TestCase):
         """ Load from an empty file """
         with open('file.json', 'w') as f:
             pass
-        with self.assertRaises(ValueError):
-            storage.reload()
+        storage.reload()
+        self.assertEqual(len(storage.all()), 0)
 
     def test_reload_from_nonexistent(self):
         """ Nothing happens if file does not exist """
-        self.assertEqual(storage.reload(), None)
+        if os.path.exists('file.json'):
+            os.remove('file.json')
+        storage.reload()
+        self.assertEqual(len(storage.all()), 0)
 
     def test_base_model_save(self):
         """ BaseModel save method calls storage save """

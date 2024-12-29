@@ -43,17 +43,20 @@ class FileStorage:
                   }
         try:
             temp = {}
-            with open(FileStorage.__file_path, 'r') as f:
-                temp = json.load(f)
-                for key, val in temp.items():
-                    if 'created_at' in val:
-                        if isinstance(val['created_at'], str):
-                            val['created_at'] = datetime.strptime(
-                                val['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
-                    if 'updated_at' in val:
-                        if isinstance(val['updated_at'], str):
-                            val['updated_at'] = datetime.strptime(
-                                val['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
-                    self.all()[key] = classes[val['__class__']](**val)
+            with open(self.__file_path, 'r') as f:
+                try:
+                    temp = json.load(f)
+                    for key, val in temp.items():
+                        if 'created_at' in val:
+                            if isinstance(val['created_at'], str):
+                                val['created_at'] = datetime.strptime(
+                                    val['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                        if 'updated_at' in val:
+                            if isinstance(val['updated_at'], str):
+                                val['updated_at'] = datetime.strptime(
+                                    val['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                        self.all()[key] = classes[val['__class__']](**val)
+                except json.JSONDecodeError:
+                    pass
         except FileNotFoundError:
             pass
