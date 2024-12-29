@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
+from datetime import datetime
 
 
 class FileStorage:
@@ -45,6 +46,14 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
+                    if 'created_at' in val:
+                        if isinstance(val['created_at'], str):
+                            val['created_at'] = datetime.strptime(
+                                val['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                    if 'updated_at' in val:
+                        if isinstance(val['updated_at'], str):
+                            val['updated_at'] = datetime.strptime(
+                                val['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
                     self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass

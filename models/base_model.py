@@ -20,13 +20,19 @@ class BaseModel:
                 if key not in valid_keys:
                     raise KeyError(f"Unrecognized key '{key} in kwargs")
             if 'updated_at' in kwargs:
-                self.updated_at = datetime.strptime(
-                    kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                if isinstance(kwargs['updated_at'], str):
+                    self.updated_at = datetime.strptime(
+                        kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                else:
+                    self.updated_at = kwargs['updated_at']
             else:
                 self.updated_at = datetime.now()
             if 'created_at' in kwargs:
-                self.created_at = datetime.strptime(
-                    kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                if isinstance(kwargs['created_at'], str):
+                    self.created_at = datetime.strptime(
+                        kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                else:
+                    self.created_at = kwargs['created_at']
             else:
                 self.created_at = datetime.now()
             if '__class__' in kwargs:
