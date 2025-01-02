@@ -8,7 +8,6 @@ class BaseModel:
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        valid_keys = {'id', 'created_at', 'updated_at', '__class__'}
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
@@ -16,17 +15,6 @@ class BaseModel:
             self.updated_at = datetime.now()
             storage.new(self)
         else:
-            for key in kwargs:
-                if key not in valid_keys:
-                    raise KeyError(f"Unrecognized key '{key} in kwargs")
-            if 'updated_at' in kwargs:
-                if isinstance(kwargs['updated_at'], str):
-                    self.updated_at = datetime.strptime(
-                        kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
-                else:
-                    self.updated_at = kwargs['updated_at']
-            else:
-                self.updated_at = datetime.now()
             if 'created_at' in kwargs:
                 if isinstance(kwargs['created_at'], str):
                     self.created_at = datetime.strptime(
@@ -35,6 +23,14 @@ class BaseModel:
                     self.created_at = kwargs['created_at']
             else:
                 self.created_at = datetime.now()
+            if 'updated_at' in kwargs:
+                if isinstance(kwargs['updated_at'], str):
+                    self.updated_at = datetime.strptime(
+                        kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
+                else:
+                    self.updated_at = kwargs['updated_at']
+            else:
+                self.updated_at = datetime.now()
             if '__class__' in kwargs:
                 del kwargs['__class__']
             self.__dict__.update(kwargs)
