@@ -225,11 +225,15 @@ class HBNBCommand(cmd.Cmd):
                 return
             for k, v in storage.all().items():
                 if k.split('.')[0] == args:
-                    print_list.append(f"[{args}] ({v.id}) {v.to_dict()}")
+                    obj_dict = v.to_dict()
+                    del obj_dict['__class__']
+                    print_list.append(f"[{args}] ({v.id}) {obj_dict}")
         else:
             for k, v in storage.all().items():
                 class_name = k.split('.')[0]
-                print_list.append(f"[{class_name}] ({v.id}) {v.to_dict()}")
+                obj_dict = v.to_dict()
+                del obj_dict['__class__']
+                print_list.append(f"[{class_name}] ({v.id}) {obj_dict}")
         print("[", end="")
         for i, obj in enumerate(print_list):
             if i != 0:
