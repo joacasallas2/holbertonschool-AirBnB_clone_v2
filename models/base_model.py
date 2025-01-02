@@ -15,6 +15,10 @@ class BaseModel:
             self.updated_at = datetime.now()
             storage.new(self)
         else:
+            required_keys = ['created_at', 'updated_at', 'id']
+            for key in required_keys:
+                if key not in kwargs:
+                    raise KeyError("Required Keys are missing")
             if 'created_at' in kwargs:
                 if isinstance(kwargs['created_at'], str):
                     self.created_at = datetime.strptime(
