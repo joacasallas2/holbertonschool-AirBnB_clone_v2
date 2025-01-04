@@ -9,7 +9,6 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from models import storage
 
 
 class DBStorage:
@@ -55,5 +54,29 @@ class DBStorage:
                     v = obj
                     dict_objs[k] = v
             except KeyError as e:
-                print("Error: cls {cls} doesn't exists")
+                print(f"Error: cls {cls} doesn't exists: {e}")
         return dict_objs
+
+    def new(self, obj):
+        """add the object"""
+        try:
+            self.__session.add(obj)
+        except Exception as e:
+            print(f"Is not possible add the object {obj}: {e}")
+
+    def save(self):
+        """commit all changes"""
+        try:
+            self.__session.commit()
+        except Exception as e:
+            print(f"Is not possible commit all changes: {e}")
+            self.__session.rollback()
+
+    def delete(self, obj=None):
+        """Delete from the current database session obj if not None"""
+        if obj is not None:
+            try:
+                self.__session.delete(obj)
+            except Exception as e:
+                print(f"Is not possible delete obj {obj}: {e}")
+                self.__session.rollback()
