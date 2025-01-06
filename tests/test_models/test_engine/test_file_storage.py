@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ Module for testing file storage"""
+import os
 import unittest
 from models.base_model import BaseModel
 from models import storage
-import os
 
 
 class TestFileStorage(unittest.TestCase):
@@ -11,13 +11,13 @@ class TestFileStorage(unittest.TestCase):
 
     def setUp(self):
         """ Set up test environment """
-        storage._FileStorage__objects.clear()
+        storage.all().clear()
         if os.path.exists("file.json"):
             os.remove("file.json")
 
     def tearDown(self):
         """Clean up conditions after each test"""
-        storage._FileStorage__objects.clear()
+        storage.all().clear()
         if os.path.exists("file.json"):
             os.remove("file.json")
 
@@ -32,9 +32,7 @@ class TestFileStorage(unittest.TestCase):
 
     def test_all(self):
         """ __objects is properly returned """
-        new = BaseModel()
-        temp = storage.all()
-        self.assertIsInstance(temp, dict)
+        self.assertIsInstance(storage.all(), dict)
 
     def test_base_model_instantiation(self):
         """ File is not created on BaseModel save """
@@ -51,18 +49,18 @@ class TestFileStorage(unittest.TestCase):
 
     def test_save(self):
         """ FileStorage save method """
-        new = BaseModel()
-        storage.save()
+        BaseModel().save()
         self.assertTrue(os.path.exists('file.json'))
 
     def test_reload(self):
         """ Storage file is successfully loaded to __objects """
         new = BaseModel()
-        storage.save()
+        new.save()
+        new_id = new.id
+        storage.all().clear()
+        self.assertEqual(len(storage.all()), 0)
         storage.reload()
-        for obj in storage.all().values():
-            loaded = obj
-        self.assertEqual(new.to_dict()['id'], loaded.to_dict()['id'])
+        self.assertIn(f"BaseModel.{new_id}", storage.all())
 
     def test_reload_empty(self):
         """ Load from an empty file """
