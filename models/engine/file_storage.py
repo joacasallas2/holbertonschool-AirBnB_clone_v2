@@ -27,6 +27,7 @@ class FileStorage:
 
     def reload(self):
         """Loads storage dictionary from file"""
+        from json import JSONDecodeError
         from models.base_model import BaseModel
         from models.user import User
         from models.place import Place
@@ -41,10 +42,11 @@ class FileStorage:
                     'Review': Review
                   }
         try:
-            temp = {}
             with open(FileStorage.__file_path, 'r') as f:
-                temp = json.load(f)
-                for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
-        except FileNotFoundError:
+                if f.read().strip():  # Check if the file is not empty
+                    f.seek(0)  # Reset file pointer to the start
+                    temp = json.load(f)
+                    for key, val in temp.items():
+                        self.all()[key] = classes[val['__class__']](**val)
+        except (FileNotFoundError, JSONDecodeError):
             pass
