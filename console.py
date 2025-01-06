@@ -118,13 +118,29 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        args = args.split()
+        class_name = args[0]
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+        new_instance = HBNBCommand.classes[class_name]()
+        for arg in args[1:]:
+            if "=" in arg:
+                key, value = arg.split("=", 1)
+                if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1]
+                    value = value.replace("_", " ").replace('\\"', '"')
+                try:
+                    if "." in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
+                except ValueError:
+                    pass
+                if value is not None:
+                    setattr(new_instance, key, value)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -198,22 +214,27 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: destroy <className> <objectId>\n")
 
     def do_all(self, args):
-        """ Shows all objects, or all objects of a class"""
+        """ Shows all objects, or all objects of a class """
         print_list = []
 
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
+            # Remove possible trailing args and validate the class
+            class_name = args.split(' ')[0]
+            if class_name not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
+
+            # Filter objects by class name
             for k, v in storage.all().items():
-                if k.split('.')[0] == args:
+                if v.__class__.__name__ == class_name:
                     print_list.append(str(v))
         else:
+            # Include all objects
             for k, v in storage.all().items():
                 print_list.append(str(v))
 
-        print(print_list)
+        # Print the result in the required format
+        print(f"[{', '.join(print_list)}]")
 
     def help_all(self):
         """ Help information for the all command """
