@@ -9,7 +9,7 @@ import os
 
 
 class test_basemodel(unittest.TestCase):
-    """ """
+    """ Test Basemodel """
 
     def __init__(self, *args, **kwargs):
         """ """
@@ -75,10 +75,10 @@ class test_basemodel(unittest.TestCase):
             new = self.value(**n)
 
     def test_kwargs_one(self):
-        """ """
-        n = {'Name': 'test'}
+        """Test instantiation with invalid kwargs"""
+        invalid_kwargs = {"name": "California"}
         with self.assertRaises(KeyError):
-            new = self.value(**n)
+            BaseModel(**invalid_kwargs)
 
     def test_id(self):
         """ """

@@ -11,13 +11,15 @@ class TestDBStorage(unittest.TestCase):
     def setUp(self):
         """Clean database after each test"""
         self.storage = storage
-        for obj in self.storage.all().values():
+        objects = list(self.storage.all().values())
+        for obj in objects:
             self.storage.delete(obj)
         self.storage.save()
 
     def tearDown(self):
         """Ensure database is clean after each test"""
-        for obj in self.storage.all().values():
+        objs_copy = list(self.storage.all().values())
+        for obj in objs_copy:
             self.storage.delete(obj)
         self.storage.save()
 
@@ -29,14 +31,19 @@ class TestDBStorage(unittest.TestCase):
 
     def test_all_returns_dict(self):
         """Test that all returns a dictionary"""
-        self.assertIsInstance(self.storage.all(), dict)
+        from models.base_model import BaseModel
+        objects = self.storage.all()
+        self.assertIsInstance(objects, dict)
+        for obj in list(objects.values()):
+            self.assertIsInstance(obj, BaseModel)
 
     def test_new_adds_object(self):
         """Test that new adds an object to the database"""
         new_state = State(name="California")
         self.storage.new(new_state)
         self.storage.save()
-        self.assertIn(f"State.{new_state.id}", self.storage.all())
+        self.storage.reload()
+        self.assertIn(f"State.{new_state.id}", self.storage.all().keys())
 
     def test_reload_loads_objects(self):
         """Test that reload loads objects from the database"""
