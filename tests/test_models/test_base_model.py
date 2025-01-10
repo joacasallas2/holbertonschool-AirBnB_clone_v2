@@ -76,9 +76,9 @@ class test_basemodel(unittest.TestCase):
 
     def test_kwargs_one(self):
         """Test instantiation with invalid kwargs"""
-        invalid_kwargs = {"name": "California"}
+        n = {'Name': 'test'}
         with self.assertRaises(KeyError):
-            BaseModel(**invalid_kwargs)
+            new = self.value(**n)
 
     def test_id(self):
         """ """
