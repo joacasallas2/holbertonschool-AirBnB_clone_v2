@@ -54,7 +54,8 @@ class test_basemodel(unittest.TestCase):
         key = self.name + "." + i.id
         with open('file.json', 'r') as f:
             j = json.load(f)
-            self.assertEqual(j[key], i.to_dict())
+        self.assertIn(key, j, f"Key '{key}' not found in file.json")
+        self.assertEqual(j[key], i.to_dict())
 
     def test_str(self):
         """ """
