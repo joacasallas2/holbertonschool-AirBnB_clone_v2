@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from datetime import datetime
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -216,6 +217,7 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class """
         print_list = []
+        list_objs = []
 
         if args:
             # Remove possible trailing args and validate the class
@@ -225,13 +227,25 @@ class HBNBCommand(cmd.Cmd):
                 return
 
             # Filter objects by class name
-            for k, v in storage.all().items():
-                if v.__class__.__name__ == class_name:
-                    print_list.append(str(v))
+            list_objs = [
+                obj for obj in storage.all().values()
+                if obj.__class__.__name__ == class_name]
         else:
             # Include all objects
-            for k, v in storage.all().items():
-                print_list.append(str(v))
+            list_objs = storage.all().values()
+
+        for obj in list_objs:
+            dict_obj = obj.to_dict()
+            dict_obj.pop('__class__', None)
+            dict_obj.pop('_sa_instance_state', None)
+            for key, value in dict_obj.items():
+                if isinstance(value, str):
+                    try:
+                        dict_obj[key] = datetime.fromisoformat(value)
+                    except ValueError:
+                        pass
+            print_list.append(
+                f"[{obj.__class__.__name__}] ({obj.id}) {dict_obj}")
 
         # Print the result in the required format
         print(f"[{', '.join(print_list)}]")

@@ -25,15 +25,14 @@ class FileStorage:
         """Returns a dictionary of models currently in storage"""
         if cls is None:
             return self.__objects
-        if isinstance(cls, str):
-            cls_name = cls
-        else:
-            cls_name = cls.__name__
-        dict_all_objs = self.__objects
+        cls_name = cls if isinstance(cls, str) else cls.__name__
         dict_class_objs = {}
-        for key, value in dict_all_objs.items():
+        for key, value in self.__objects.items():
             if key.split(".")[0] == cls_name:
-                dict_class_objs[key] = value
+                dict_obj = value.to_dict()
+                dict_obj.pop('_sa_instance_state', None)
+                dict_obj.pop('__class__', None)
+                dict_class_objs[key] = dict_obj
         return dict_class_objs
 
     def new(self, obj):
