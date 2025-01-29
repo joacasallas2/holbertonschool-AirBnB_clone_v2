@@ -25,7 +25,9 @@ class BaseModel:
         else:
             for key in ['id', 'created_at', 'updated_at']:
                 if key not in kwargs:
-                    raise KeyError(f"missing required keys {key}")
+                    self.id = str(uuid.uuid4())
+                    self.created_at = datetime.now()
+                    self.updated_at = datetime.now()
             for key, value in kwargs.items():
                 if key in ['updated_at', 'created_at']:
                     if isinstance(value, str):
