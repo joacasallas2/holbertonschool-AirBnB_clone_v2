@@ -29,10 +29,7 @@ class FileStorage:
         dict_class_objs = {}
         for key, value in self.__objects.items():
             if key.split(".")[0] == cls_name:
-                dict_obj = value.to_dict()
-                dict_obj.pop('_sa_instance_state', None)
-                dict_obj.pop('__class__', None)
-                dict_class_objs[key] = dict_obj
+                dict_class_objs[key] = value
         return dict_class_objs
 
     def new(self, obj):
@@ -53,12 +50,12 @@ class FileStorage:
         from json import JSONDecodeError
 
         try:
-            with open(FileStorage.__file_path, 'r') as f:
+            with open(self.__file_path, 'r') as f:
                 if f.read().strip():  # Check if the file is not empty
                     f.seek(0)  # Reset file pointer to the start
                     temp = json.load(f)
                     for key, val in temp.items():
-                        self.all()[key] = self.classes[
+                        self.__objects[key] = self.classes[
                             val['__class__']](**val)
         except (FileNotFoundError, JSONDecodeError):
             pass
@@ -68,3 +65,7 @@ class FileStorage:
         if obj is None:
             return
         self.__objects.pop(f"{obj.__class__.__name__}.{obj.id}", None)
+
+    def close(self):
+        """deserializing the JSON file back into objects"""
+        self.reload()
