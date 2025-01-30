@@ -27,12 +27,12 @@ def text_c(text):
     return f"C {escape(text)}"
 
 
-@app.route("/python", strict_slashes=False)
+
 def sentence_python():
     """Display Python is cool"""
     return "Python is cool"
 
-
+@app.route("/python", strict_slashes=False)
 @app.route("/python/<text>", strict_slashes=False)
 def text_python(text="is cool"):
     """Complete a sentence with the parameter"""
