@@ -22,6 +22,8 @@ def hbnb():
 @app.route("/c/<text>", strict_slashes=False)
 def text(text):
     """Complete a sentence with the parameter"""
+    if "_" in text:
+        text = text.replace("_", " ")
     return f"C {escape(text)}"
 
 
