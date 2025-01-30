@@ -20,7 +20,7 @@ def hbnb():
 
 
 @app.route("/c/<text>", strict_slashes=False)
-def text():
+def text(text):
     """Complete a sentence with the parameter"""
     return f"C {escape(text)}"
 
